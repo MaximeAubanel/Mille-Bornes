@@ -31,9 +31,9 @@ public class Network implements msgToSendListener {
 		_NetworkInitializer._NetworkHandler.addLobbyListeners(toAdd);
 	}
 	
-	public void setNetwork(String host, int port) {
+	public void setNetwork(String host, String port) {
 		this._Host = host;
-		this._Port = port;
+		this._Port = Integer.parseInt(port);
 	}
 	
 	public int tryConnect() {

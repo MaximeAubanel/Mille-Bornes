@@ -34,23 +34,18 @@ public class Client {
 		ActionListener ListenerStart = new ActionListener() {
 			public void actionPerformed(ActionEvent e) { 
 				
-				String Username = (_GUI._StartPanel.getUsername().trim().isEmpty()) ? _GUI._StartPanel.getUsername() : "user";
-				String IP = (_GUI._StartPanel.getServerIP().trim().isEmpty()) ? _GUI._StartPanel.getServerIP() : "127.0.0.1";
-				int Port = 8889;
+				String Username = (!_GUI._StartPanel.getUsername().trim().isEmpty()) ? _GUI._StartPanel.getUsername() : "user";
+				String IP = (!_GUI._StartPanel.getServerIP().trim().isEmpty()) ? _GUI._StartPanel.getServerIP() : "127.0.0.1";
+				String Port = (!_GUI._StartPanel.getServerPort().trim().isEmpty()) ? _GUI._StartPanel.getServerPort() : "8889";
 				
-				if (Username.isEmpty() || IP.isEmpty() || Port == 0)
-					_GUI._StartPanel.getErrorMsg().setText("Username or address IP invalid");
-				else
-				{
-					_Network.setNetwork(IP, Port);
-					if (_Network.tryConnect() == -1) {
-						_GUI._StartPanel.getErrorMsg().setText("Unable to connect to the server");
-						_Network.reset();
-					}
-					else
-						_GUI.DisplayLobby();
+				_Network.setNetwork(IP, Port);
+				if (_Network.tryConnect() == -1) {
+					_GUI._StartPanel.getErrorMsg().setText("Unable to connect to the server");
+					_Network.reset();
+					_Network.setListenersForMsgReceived(_GUI);
+				} else
+					_GUI.DisplayLobby();
 				}
-			}  
 		};
 		_GUI._StartPanel.getButton().addActionListener(ListenerStart);
 	}

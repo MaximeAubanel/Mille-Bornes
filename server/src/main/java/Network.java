@@ -9,7 +9,8 @@ public class Network {
 	private EventLoopGroup		_BossGroup;
 	private EventLoopGroup		_WorkerGroup;
 	private ServerBootstrap		_Bootstrap;
-
+	volatile public NetworkInitializer	_NetworkInitializer = new NetworkInitializer();
+		
 	public Network(int port) {
 		_Port = port;
 	}
@@ -24,7 +25,7 @@ public class Network {
 			_Bootstrap = new ServerBootstrap()
 					.group(_BossGroup, _WorkerGroup)
 					.channel(NioServerSocketChannel.class)
-					.childHandler(new NetworkInitializer());
+					.childHandler(_NetworkInitializer);
 			
 			_Bootstrap.bind(_Port).sync().channel().closeFuture().sync();
 		} finally {

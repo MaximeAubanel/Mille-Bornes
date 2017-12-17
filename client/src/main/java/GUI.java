@@ -37,8 +37,8 @@ public class GUI implements msgReceivedListener {
 	
 	private void InitWindow() {
 		_MainWindow.setTitle("Mille Borne");
-		_MainWindow.setSize(500, 500);
-		_MainWindow.setResizable(false);
+		_MainWindow.setSize(700, 700);
+		_MainWindow.setResizable(true);
 		_MainWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		_MainWindow.setLocationRelativeTo(null);
 		_MainWindow.setVisible(true);

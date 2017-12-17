@@ -1,17 +1,23 @@
+import java.util.ArrayList;
+
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
-public class NetworkHandler extends SimpleChannelInboundHandler<String> {
+@ChannelHandler.Sharable
+public class NetworkHandler extends SimpleChannelInboundHandler<String> implements CoreListeners {
 
 	final static String SERVER 			= "[0x0]";	
 	final static String LOBBY 			= "[0x1]";
 	final static String GAME 			= "[0x2]";
 
 	private static final ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+
+	private ArrayList<UserModifListeners> 	_UserModifListeners = new ArrayList<UserModifListeners>();
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
@@ -27,7 +33,13 @@ public class NetworkHandler extends SimpleChannelInboundHandler<String> {
     
     public void LobbyHandler(String  msg, ChannelHandlerContext ctx) {
     	if (msg.compareTo("ready") == 0) {
-    		
+    		for (UserModifListeners e : _UserModifListeners) {
+    			e.Ready(ctx);
+    		}
+    	} else if (msg.compareTo("cancel") == 0) {
+    		for (UserModifListeners e : _UserModifListeners) {
+    			e.CancelReady(ctx);
+    		}
     	} else {
     		broadcastMessageToAll(LOBBY, msg, ctx);
     	}
@@ -56,19 +68,32 @@ public class NetworkHandler extends SimpleChannelInboundHandler<String> {
 	@Override
 	public 	void handlerAdded(ChannelHandlerContext ctx) throws Exception {
 		addUser(ctx);
+		for (UserModifListeners e : _UserModifListeners) {
+			e.addUser(ctx);
+		}
 	}
+	
+	
+	
+	public void addListeners(UserModifListeners e) {
+		_UserModifListeners.add(e);
+	}	
+	
 	@Override
 	public 	void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
 		removeUser(ctx);
+		for (UserModifListeners e : _UserModifListeners) {
+			e.removeUser(ctx);
+		}
 	}
     private void addUser(ChannelHandlerContext ctx) {
-		myPrint("[" + ctx.channel().remoteAddress() + "] has joined !\n");
+		myPrint("[" + ctx.channel().remoteAddress() + "] has joined !");
 		
 		broadcastMessageToAll(LOBBY, "[" + ctx.channel().remoteAddress() + "] has joined !");
 		channels.add(ctx.channel());
     }
     private void removeUser(ChannelHandlerContext ctx) {
-    	myPrint("[" + ctx.channel().remoteAddress() + "] has left !\n");
+    	myPrint("[" + ctx.channel().remoteAddress() + "] has left !");
 		
 		broadcastMessageToAll(LOBBY, "[" + ctx.channel().remoteAddress() + "] has left !");
 		ctx.close();
@@ -76,11 +101,21 @@ public class NetworkHandler extends SimpleChannelInboundHandler<String> {
     }
     
     private void myPrint(String str) {
-    	System.out.println(str);
+    	System.out.println("[SERVER] : " + str);
     }
     @Override
     public 	void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
          cause.printStackTrace();
         ctx.close();
     }
+
+	@Override
+	public void startCountDown() {
+		myPrint("start");
+	}
+
+	@Override
+	public void stopCountDown() {
+		myPrint("stop");		
+	}
 }
