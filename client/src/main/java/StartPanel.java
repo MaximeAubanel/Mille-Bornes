@@ -5,7 +5,7 @@ import java.awt.GridBagConstraints;
 
 public class StartPanel {
 	
-	private JPanel			_Panel			= new JPanel(new GridBagLayout());
+	private JPanel			_Panel = new JPanel(new GridBagLayout());
 	private JTextField		_Username 		= new JTextField("");
 	private JTextField		_ServerIP 		= new JTextField("");
 	private JTextField		_ServerPort		= new JTextField("");

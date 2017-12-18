@@ -11,10 +11,6 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 @ChannelHandler.Sharable
 public class NetworkHandler extends SimpleChannelInboundHandler<String> implements CoreListeners {
 
-	final static String SERVER 			= "[0x0]";	
-	final static String LOBBY 			= "[0x1]";
-	final static String GAME 			= "[0x2]";
-
 	private static final ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
 	private ArrayList<UserModifListeners> 	_UserModifListeners = new ArrayList<UserModifListeners>();
@@ -23,11 +19,11 @@ public class NetworkHandler extends SimpleChannelInboundHandler<String> implemen
     public void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
     	String header = msg.substring(0, 5);
 
-    	if (header.compareTo(SERVER) == 0)
+    	if (header.compareTo(Global.SERVER) == 0)
     		ServerHandler(msg.substring(5), ctx);
-		else if (header.compareTo(LOBBY) == 0)
+		else if (header.compareTo(Global.LOBBY) == 0)
     		LobbyHandler(msg.substring(5), ctx);    		 
-    	else if (header.compareTo(GAME) == 0)
+    	else if (header.compareTo(Global.GAME) == 0)
 			GameHandler(msg.substring(5), ctx);    		  		
     } 
     
@@ -41,7 +37,7 @@ public class NetworkHandler extends SimpleChannelInboundHandler<String> implemen
     			e.CancelReady(ctx);
     		}
     	} else {
-    		broadcastMessageToAll(LOBBY, msg, ctx);
+    		broadcastMessageToAll(Global.LOBBY, msg, ctx);
     	}
     }  
     public void ServerHandler(String  msg, ChannelHandlerContext ctx) {
@@ -89,13 +85,13 @@ public class NetworkHandler extends SimpleChannelInboundHandler<String> implemen
     private void addUser(ChannelHandlerContext ctx) {
 		myPrint("[" + ctx.channel().remoteAddress() + "] has joined !");
 		
-		broadcastMessageToAll(LOBBY, "[" + ctx.channel().remoteAddress() + "] has joined !");
+		broadcastMessageToAll(Global.LOBBY, "[" + ctx.channel().remoteAddress() + "] has joined !");
 		channels.add(ctx.channel());
     }
     private void removeUser(ChannelHandlerContext ctx) {
     	myPrint("[" + ctx.channel().remoteAddress() + "] has left !");
 		
-		broadcastMessageToAll(LOBBY, "[" + ctx.channel().remoteAddress() + "] has left !");
+		broadcastMessageToAll(Global.LOBBY, "[" + ctx.channel().remoteAddress() + "] has left !");
 		ctx.close();
 		channels.remove(ctx.channel());
     }
@@ -117,5 +113,15 @@ public class NetworkHandler extends SimpleChannelInboundHandler<String> implemen
 	@Override
 	public void stopCountDown() {
 		myPrint("stop");		
+	}
+
+	@Override
+	public void sendCountdownToAllUsers(String msg) {
+		broadcastMessageToAll(Global.LOBBY, "[SERVER] : " + msg);
+	}
+
+	@Override
+	public void sendChangeStateToAllUsers(String newState) {
+		broadcastMessageToAll(Global.STATE, newState);		
 	}
 }

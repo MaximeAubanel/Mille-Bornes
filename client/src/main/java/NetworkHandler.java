@@ -8,11 +8,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 public class NetworkHandler extends SimpleChannelInboundHandler<String> {
 	
-	final static String SERVER 			= "[0x0]";	
-	final static String LOBBY 			= "[0x1]";
-	final static String GAME 			= "[0x2]";
-
-	private ArrayList<msgReceivedListener> lobbyListeners = new ArrayList<msgReceivedListener>();
+	private ArrayList<msgReceivedListener> _Listeners = new ArrayList<msgReceivedListener>();
     
 	@Override
 	public void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
@@ -20,23 +16,29 @@ public class NetworkHandler extends SimpleChannelInboundHandler<String> {
 		 System.out.println("msg received");		 
 
 		String header = msg.substring(0, 5);
-    	if (header.compareTo(LOBBY) == 0)
+    	if (header.compareTo(Global.LOBBY) == 0)
     		LobbyHandler(msg.substring(5));    		 
-    	else if (header.compareTo(GAME) == 0)
+    	else if (header.compareTo(Global.GAME) == 0)
 			GameHandler(msg.substring(5));    		
-		else if (header.compareTo(SERVER) == 0)
+		else if (header.compareTo(Global.SERVER) == 0)
     		ServerHandler(msg.substring(5));
+		else if (header.compareTo(Global.STATE) == 0)
+    		StateHandler(msg.substring(5));
     }
 	
     public void ServerHandler(String  msg) {
 		 
     }
     public void LobbyHandler(String  msg) {
-		 for (msgReceivedListener x : lobbyListeners)
+		 for (msgReceivedListener x : _Listeners)
 			 x.messageReceived(msg);
     }
     public void GameHandler(String  msg) {
     	
+    }
+    public void StateHandler(String newState) {
+		 for (msgReceivedListener x : _Listeners)
+			 x.changeState(newState);
     }
     
 	@Override
@@ -45,7 +47,7 @@ public class NetworkHandler extends SimpleChannelInboundHandler<String> {
 		 arg0.close();
 	}
 	public void addLobbyListeners(msgReceivedListener toAdd) {
-		lobbyListeners.add(toAdd);
+		_Listeners.add(toAdd);
 	}
 }
 

@@ -56,17 +56,33 @@ public class Core implements UserModifListeners {
 			int x = 0;  
 			@Override
 			  public void run() {
+				sendCountdownToAllUsers("Game Starting in " + (5 - x));
+				myPrint((5 - x) + "");
 				if (x == 4) {
+					sendChangeStateToAllUsers(Global.STATE_GAME);
 					_Timer.cancel();
 					_Timer.purge(); 
 				}
-				myPrint("hey");
 				x = x + 1;
 			}
 			}, 0, 1*1*1000);
 	}
 	
+	private void sendChangeStateToAllUsers(String header) {
+		for (CoreListeners e : _Listeners) {
+			e.sendChangeStateToAllUsers(header);
+		}			
+	}
+	
+	private void sendCountdownToAllUsers(String msg) {
+		for (CoreListeners e : _Listeners) {
+			e.sendCountdownToAllUsers(msg);
+		}	
+	}
+	
 	private void startCountDown() {
+		if (_CountDown == true)
+			return ;
 		for (CoreListeners e : _Listeners) {
 			e.startCountDown();
 		}
@@ -78,6 +94,7 @@ public class Core implements UserModifListeners {
 	private void stopCountDown() {
 		if (_CountDown == false)
 			return ;
+		sendCountdownToAllUsers("Game Start Cancelled");
 		for (CoreListeners e : _Listeners) {
 			e.stopCountDown();
 		}

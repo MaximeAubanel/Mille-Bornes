@@ -8,6 +8,8 @@ interface UserModifListeners {
 }
 
 interface CoreListeners {
+	void sendCountdownToAllUsers(String msg);
 	void startCountDown();
 	void stopCountDown();
+	void sendChangeStateToAllUsers(String header);
 }

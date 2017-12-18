@@ -16,6 +16,7 @@ public class GUI implements msgReceivedListener {
 	
 	public StartPanel	_StartPanel 	= new StartPanel();
 	public LobbyPanel	_LobbyPanel 	= new LobbyPanel();
+	public GamePanel	_GamePanel 		= new GamePanel();
 	
 	
 	public GUI() {
@@ -37,7 +38,7 @@ public class GUI implements msgReceivedListener {
 	
 	private void InitWindow() {
 		_MainWindow.setTitle("Mille Borne");
-		_MainWindow.setSize(700, 700);
+		_MainWindow.setSize(1920, 1080);
 		_MainWindow.setResizable(true);
 		_MainWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		_MainWindow.setLocationRelativeTo(null);
@@ -49,7 +50,7 @@ public class GUI implements msgReceivedListener {
 		
 		_MainPanel.add(_StartPanel.getPanel(), STARTPANEL);
 		_MainPanel.add(_LobbyPanel.getPanel(), LOBBYPANEL);
-		//_MainPanel.add(GAMEPANEL);
+		_MainPanel.add(_GamePanel.getPanel(), GAMEPANEL);
 		//_MainPanel.add(ENDPANEL);
 	}
 	
@@ -58,7 +59,11 @@ public class GUI implements msgReceivedListener {
 	}
 	
 	public void DisplayLobby() {
-			_MainLayout.show(_MainPanel, LOBBYPANEL);
+		_MainLayout.show(_MainPanel, LOBBYPANEL);
+	}
+
+	public void DisplayGame() {
+		_MainLayout.show(_MainPanel, GAMEPANEL);
 	}
 	
 	public boolean isOver() {
@@ -71,5 +76,18 @@ public class GUI implements msgReceivedListener {
 	@Override
 	public void messageReceived(String msg) {
 		_LobbyPanel.addMsg(msg);
+	}
+
+	@Override
+	public void changeState(String newState) {
+		if (newState.compareTo(Global.STATE_GAME) == 0)
+			DisplayGame();
+		else if (newState.compareTo(Global.STATE_LOBBY) == 0)
+			DisplayLobby();
+//		else if (newState.compareTo(Global.STATE_START) == 0)
+	//		DisplayStart();
+//		else if (newState.compareTo(Global.STATE_END) == 0)
+	//		DisplayStart();
+
 	}	
 }

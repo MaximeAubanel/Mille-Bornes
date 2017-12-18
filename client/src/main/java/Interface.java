@@ -4,4 +4,5 @@ interface msgToSendListener {
 
 interface msgReceivedListener {
 	void messageReceived(String msg);
+	void changeState(String newState);
 }
