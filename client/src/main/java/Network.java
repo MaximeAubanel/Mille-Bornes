@@ -33,7 +33,11 @@ public class Network implements msgToSendListener {
 	
 	public void setNetwork(String host, String port) {
 		this._Host = host;
-		this._Port = Integer.parseInt(port);
+		try {
+			this._Port = Integer.parseInt(port);			
+		} catch (Exception e) {
+			this._Port = 0;
+		}
 	}
 	
 	public int tryConnect() {

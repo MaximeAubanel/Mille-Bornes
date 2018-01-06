@@ -4,6 +4,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -38,9 +40,11 @@ public class LobbyPanel {
 		pan.add(_UserInput, BorderLayout.NORTH);	
 		   
 		JPanel user = new JPanel(new BorderLayout());
+		user.setPreferredSize(new Dimension(150, 0));
 		_Panel.add(user, BorderLayout.EAST);
 		
 		JLabel usertitle = new JLabel("Online User");
+		usertitle.setHorizontalAlignment(JLabel.CENTER);
 		user.add(usertitle, BorderLayout.NORTH);
 		
 		JTextPane userpan = new JTextPane();

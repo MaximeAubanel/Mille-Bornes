@@ -2,9 +2,9 @@ public class Server {
 	volatile Core			_Core;
 	volatile Network			_Network;
 
-	public Server() {
+	public Server(int port) {
 		_Core = new Core();
-		_Network = new Network(8889);
+		_Network = new Network(port);
 	}
 	
 	public void Run() throws Exception {

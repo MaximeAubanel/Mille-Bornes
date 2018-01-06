@@ -8,15 +8,14 @@
     	<version>0.0.1</version>
   	</parent>
   	
-  	<groupId>com.myself.me</groupId>
-	<artifactId>client</artifactId>
+  	<artifactId>client</artifactId>
   	<packaging>jar</packaging>
-  	<version>0.0.1</version>
   	<name>client</name>
   	<url>http://maven.apache.org</url>
 	
 	<properties>
     	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+   	    <jar.finalName>${project.name}</jar.finalName>
   	</properties>
 	
 	<dependencies>
@@ -40,15 +39,7 @@
 	</dependencies>
 	
 	<build>
-	    <resources>
-      		<resource>
-        		<directory>src/main/resources</directory>
-		        <includes>
-          			<include>25.jpg</include>
-        		</includes>
-	    	</resource>
-    	</resources>
-
+	    <finalName>client</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -89,9 +80,11 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>3.1.0</version>
 				<configuration>
+			        <outputDirectory>../target</outputDirectory>
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
+        			<appendAssemblyId>false</appendAssemblyId>
     				<archive>
     					<manifest>
     						<mainClass>Main</mainClass>

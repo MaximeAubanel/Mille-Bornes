@@ -65,7 +65,7 @@ public class Core implements UserModifListeners {
 				}
 				x = x + 1;
 			}
-			}, 0, 1*1*1000);
+		}, 0, 1*1*1000);
 	}
 	
 	private void sendChangeStateToAllUsers(String header) {
@@ -111,8 +111,11 @@ public class Core implements UserModifListeners {
 		System.out.println("[CORE] : " +  str);
 	}
 
+	
+	
 	@Override
 	public void Ready(ChannelHandlerContext ctx) {
+		sendCountdownToAllUsers(ctx.channel().remoteAddress() + " is ready to start the game");
 		for (Iterator<User> it = lUser.listIterator(); it.hasNext(); ) {
 		    User a = it.next();
 			if (a.getConnection().channel().remoteAddress() == ctx.channel().remoteAddress()) {
@@ -125,6 +128,7 @@ public class Core implements UserModifListeners {
 
 	@Override
 	public void CancelReady(ChannelHandlerContext ctx) {
+		sendCountdownToAllUsers(ctx.channel().remoteAddress() + " cancelled the start of the game");
 		for (Iterator<User> it = lUser.listIterator(); it.hasNext(); ) {
 		    User a = it.next();
 			if (a.getConnection().channel().remoteAddress() == ctx.channel().remoteAddress()) {

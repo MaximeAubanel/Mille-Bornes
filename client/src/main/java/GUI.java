@@ -22,6 +22,8 @@ public class GUI implements msgReceivedListener {
 	public GUI() {
 		InitWindow();
 		InitPanelLayout();
+		
+		DisplayStart();
 	}
 	
 	public void setListenersForMsgToSend(msgToSendListener toAdd) {
@@ -38,10 +40,10 @@ public class GUI implements msgReceivedListener {
 	
 	private void InitWindow() {
 		_MainWindow.setTitle("Mille Borne");
-		_MainWindow.setSize(1920, 1080);
-		_MainWindow.setResizable(true);
+		_MainWindow.setSize(550, 700);
+		_MainWindow.setResizable(false);
 		_MainWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		_MainWindow.setLocationRelativeTo(null);
+		//_MainWindow.setLocationRelativeTo(null);
 		_MainWindow.setVisible(true);
 	}
 	

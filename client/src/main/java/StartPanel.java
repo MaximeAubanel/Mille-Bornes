@@ -6,9 +6,9 @@ import java.awt.GridBagConstraints;
 public class StartPanel {
 	
 	private JPanel			_Panel = new JPanel(new GridBagLayout());
-	private JTextField		_Username 		= new JTextField("");
-	private JTextField		_ServerIP 		= new JTextField("");
-	private JTextField		_ServerPort		= new JTextField("");
+	private JTextField		_Username 		= new JTextField("Username");
+	private JTextField		_ServerIP 		= new JTextField("127.0.0.1");
+	private JTextField		_ServerPort		= new JTextField("Port");
 	private JButton 		_Button			= new JButton("Connect");
 	private JLabel			_ErrorMsg		= new JLabel(" ");
 	
